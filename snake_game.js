@@ -1,62 +1,95 @@
-class Snake{  
-  constructor(){
-    this.x = displayWidth/4;
-    this.y = displayHeight/4;
-    this.speed = 3;
-  }
-  
-  update(posX,posY){
-    this.x += posX * this.speed;
-    this.y += posY * this.speed;
-  }
-  
-  show(){
-    fill(10);
-    rect(this.x, this.y, 20, 20);
-  }
-}
+let posX; // Central X coordinate
+let posY; // Central Y coordinate
 
-let snake;
+let canvas_size;
 
-let dirX;
-let dirY;
+let r; // Circle radius
 
 function setup() {
-  createCanvas(displayWidth/2, displayHeight/2);
+  canvas_size = 400;
+  createCanvas(canvas_size, canvas_size);
+  posX = 0;
+  posY = 0;
   
-  snake = new Snake();
-  dirX = 1;
-  dirY = 0;
+  r = 100;
 }
 
 function draw() {
-  background(220);
+  background(0);
+  translate(canvas_size/2,canvas_size/2);
+  
+  let x = (mouseX - canvas_size/2) - posX;
+  let y = (mouseY - canvas_size/2) - posY;
+  
+  D = sqrt(sq(x) + sq(y));
   
   if(keyIsPressed){
-    direction();
+   direction();    
+  }  
+  
+  stroke(255);
+  noFill();
+  ellipse(posX,posY, 2 * r, 2 * r);
+  
+  // CAN BE USED TO SUBSTITUTE SECOND X AND Y COORDS
+  // co = x * r / D; 
+  // ca = y * r / D;
+  // line(posX, posY, co + posX, ca + posY);
+  
+  alfa = acos(y / D);
+  beta = -acos(y / D);
+  amp = 0.1;
+  
+  if(x > 0){
+    line(posX, posY, (r * sin(alfa - amp)) + posX,
+                     (r * cos(alfa - amp)) + posY);
+    line(posX, posY, (r * sin(alfa + amp)) + posX, 
+                     (r * cos(alfa + amp)) + posY);    
+  }else{
+    line(posX, posY, (r * sin(beta - amp)) + posX,
+                     (r * cos(beta - amp)) + posY);    
+    line(posX, posY, (r * sin(beta + amp)) + posX,
+                     (r * cos(beta + amp)) + posY);
   }
-  
-  snake.update(dirX, dirY);
-  
-  snake.show();
 }
 
-function direction(){
-  if(key == 'd' || key == 'D' 
-   || keyCode == RIGHT_ARROW){
-    dirX = 1;
-    dirY = 0;
-  }else if(key == 'a' || key == 'A' 
-           || keyCode == LEFT_ARROW){
-    dirX = -1;
-    dirY = 0;
-  }else if(key == 's' || key == 'S' 
-           || keyCode == DOWN_ARROW){
-    dirX = 0;
-    dirY = 1;
-  }else if(key == 'w' || key == 'W' 
-           || keyCode == UP_ARROW){
-    dirX = 0;
-    dirY = -1;      
+function direction(){  
+  switch(key){
+    case 'w' || 'W' || UP_ARROW:
+      posY--;
+      break;
+    case 'a' || 'A' || LEFT_ARROW:
+      posX--;
+      break;
+    case 's' || 'S' || DOWN_ARROW:
+      posY++;
+      break;
+    case 'd' || 'D' || RIGHT_ARROW:
+      posX++;
+      break;
+      
+      
+    // DOESN'T WORK
+      
+    // case ('w' && 'a') || ('W' && 'A') 
+    //       || (UP_ARROW && LEFT_ARROW):
+    //   posY--;
+    //   posX--;
+    //   break;
+    // case ('w' && 'd') || ('W' && 'D') 
+    //       || (UP_ARROW && RIGHT_ARROW):
+    //   posY--;
+    //   posX++;
+    //   break;
+    // case ('s' && 'a') || ('S' && 'A')
+    //       || (DOWN_ARROW && LEFT_ARROW):
+    //   posY++;
+    //   posX--;
+    //   break;
+    // case ('s' && 'd') || ('S' && 'D') 
+    //       || (DOWN_ARROW && RIGHT_ARROW):
+    //   posY++;
+    //   posX++;
+    //   break;
   }
 }
