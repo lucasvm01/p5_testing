@@ -20,6 +20,11 @@ function draw() {
   
   drawYaxis();
   
+  createGraph();
+  
+}
+
+function createGraph(){
   for(let i = -axisXSize; i <= axisXSize; i+= 0.05){
     ellipse(i * graphScale,-1 * 
             
@@ -31,7 +36,6 @@ function draw() {
             
                 * graphScale,0.05);
   }
-  
 }
 
 function drawXaxis(){
