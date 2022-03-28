@@ -1,108 +1,62 @@
-let x; // mouseX coordinate
-let y; // mouseY coordinate
+class Snake{  
+  constructor(){
+    this.x = displayWidth/4;
+    this.y = displayHeight/4;
+    this.speed = 3;
+  }
 
-let posX; // Central X coordinate
-let posY; // Central Y coordinate
+  update(posX,posY){
+    this.x += posX * this.speed;
+    this.y += posY * this.speed;
+  }
 
-let canvas_size;
+  show(){
+    fill(10);
+    rect(this.x, this.y, 20, 20);
+  }
+}
 
-let r; // Circle radius
+let snake;
+
+let dirX;
+let dirY;
 
 function setup() {
-  canvas_size = 400;
-  createCanvas(canvas_size, canvas_size);
-  posX = 0;
-  posY = 0;
-  
-  r = 100;
+  createCanvas(displayWidth/2, displayHeight/2);
+
+  snake = new Snake();
+  dirX = 1;
+  dirY = 0;
 }
 
 function draw() {
-  background(0);
-  translate(canvas_size/2,canvas_size/2);
-  
-  // Get mouse X and  Y coords
-  x = (mouseX - canvas_size/2) - posX;
-  y = (mouseY - canvas_size/2) - posY;
-  
-  // Walking
+  background(220);
+
   if(keyIsPressed){
-   direction();    
-  }  
-  
-  stroke(255);
-  noFill();
-  ellipse(posX,posY, 2 * r, 2 * r);
-  
-  character();
-}
-
-
-function character(){
-  // Get distance from center of circle to mouse
-  D = sqrt(sq(x) + sq(y));
-  
-  // Get angle of looking direction
-  alfa = acos(y / D);
-  beta = -acos(y / D);
-  amp = 0.1; // FOV
-  
-  
-  if(x > 0){
-    line(posX, posY, (r * sin(alfa - amp)) + posX,
-                     (r * cos(alfa - amp)) + posY);
-    line(posX, posY, (r * sin(alfa + amp)) + posX, 
-                     (r * cos(alfa + amp)) + posY);    
-  }else{
-    line(posX, posY, (r * sin(beta - amp)) + posX,
-                     (r * cos(beta - amp)) + posY);    
-    line(posX, posY, (r * sin(beta + amp)) + posX,
-                     (r * cos(beta + amp)) + posY);
+    direction();
   }
-  
-  // CAN BE USED TO SUBSTITUTE SECOND X AND Y COORDS
-  // co = x * r / D; 
-  // ca = y * r / D;
-  // line(posX, posY, co + posX, ca + posY);
+
+  snake.update(dirX, dirY);
+
+  snake.show();
 }
 
-function direction(){  
-  switch(key){
-    case 'w' || 'W' || UP_ARROW:
-      posY--;
-      break;
-    case 'a' || 'A' || LEFT_ARROW:
-      posX--;
-      break;
-    case 's' || 'S' || DOWN_ARROW:
-      posY++;
-      break;
-    case 'd' || 'D' || RIGHT_ARROW:
-      posX++;
-      break;
-      
-      
-    // DOESN'T WORK
-      
-    // case ('w' && 'a') || ('W' && 'A') 
-    //       || (UP_ARROW && LEFT_ARROW):
-    //   posY--;
-    //   posX--;
-    //   break;
-    // case ('w' && 'd') || ('W' && 'D') 
-    //       || (UP_ARROW && RIGHT_ARROW):
-    //   posY--;
-    //   posX++;
-    //   break;
-    // case ('s' && 'a') || ('S' && 'A')
-    //       || (DOWN_ARROW && LEFT_ARROW):
-    //   posY++;
-    //   posX--;
-    //   break;
-    // case ('s' && 'd') || ('S' && 'D') 
-    //       || (DOWN_ARROW && RIGHT_ARROW):
-    //   posY++;
-    //   posX++;
-    //   break;
+function direction(){
+  if(key == 'd' || key == 'D' 
+   || keyCode == RIGHT_ARROW){
+    dirX = 1;
+    dirY = 0;
+  }else if(key == 'a' || key == 'A' 
+           || keyCode == LEFT_ARROW){
+    dirX = -1;
+    dirY = 0;
+  }else if(key == 's' || key == 'S' 
+           || keyCode == DOWN_ARROW){
+    dirX = 0;
+    dirY = 1;
+  }else if(key == 'w' || key == 'W' 
+           || keyCode == UP_ARROW){
+    dirX = 0;
+    dirY = -1;      
   }
 }
