@@ -35,15 +35,19 @@ function draw() {
   
   drawGrid();
   
-  // Desenho da função linear
-  stroke(255,0,0);
-  line(-L * graphScale,L * graphScale,L * graphScale,-L * graphScale);
-  
-  createGraph();
+  graphFunction();
+
+  graphSeries();
   
 }
 
-function createGraph(){
+function graphFunction(){
+  // Desenho da função linear
+  stroke(255,0,0);
+  line(-L * graphScale,L * graphScale,L * graphScale,-L * graphScale);
+}
+
+function graphSeries(){
   
   // Controla a quantidade de somas da série
   a = slider.value();
