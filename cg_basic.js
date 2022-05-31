@@ -1,5 +1,7 @@
 
 let sl;
+let timeSlider;
+let zSlider;
 let time = 0;
 
 let v = [];
@@ -90,7 +92,7 @@ function getRotation(v1){
 
 function InitializePerspective(){
   
-  sl = 3;
+  sl = 10;
   
   a = winWidth / winHeight;
   fov = 1/(tan(angle)/2);
@@ -116,8 +118,11 @@ function setup() {
   winWidth = 500;
   winHeight = 500;
   angle = (50 * PI / 180) * 0.5;
-  zfar = 10;
+  zfar = 1000;
   znear = 0.1;
+  
+  timeSlider = createSlider(0.01, 0.5, 0.05, 0.05);
+  zSlider = createSlider(1, 100, 50);
   
   createCanvas(winWidth, winHeight);
   
@@ -134,7 +139,7 @@ function draw() {
   ellipse(mouseX - width/2, mouseY - height/2, 10);  
   scale(5);
   
-  time += 0.05;
+  time += timeSlider.value();
   
   let vProjected = [];
   let vTranslated = [];
@@ -145,7 +150,7 @@ function draw() {
     
     vTranslated[i] = vRotated[i];
     
-    vTranslated[i].z = vRotated[i].z + 10;
+    vTranslated[i].z = vRotated[i].z + zSlider.value();
     
     vProjected[i] = getProjection(vTranslated[i]);
   }
